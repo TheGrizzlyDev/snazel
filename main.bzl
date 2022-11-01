@@ -5,6 +5,14 @@ WIDTH = 20
 HEIGHT = 20
 UPDATE_EVERY_N_LOOPS = 4
 
+def reset_game(lib):
+    lib.set("position", [(0, 0)])
+    lib.set("direction", "s")
+    lib.set("old_direction", "s")
+    lib.set("iteration", 0)
+    lib.set("ate_food", True)
+    lib.set("food", (10, 10))
+
 def update(lib):
     dir = lib.get("direction")
     pos = lib.get("position")
@@ -26,17 +34,23 @@ def update(lib):
         if y >= HEIGHT:
             y = 0
 
-    pos.insert(0, (x, y))
-
     food_x, food_y = lib.get("food")
     if x == food_x and y == food_y:
         lib.set("food", (lib.random(0, WIDTH), lib.random(0, HEIGHT)))
     else:
         pos.pop()
 
+    alive = True
+    for body_x, body_y in pos:
+        if body_x == x and body_y == y:
+            alive = False
 
-    lib.set("position", pos)
-    lib.set("old_direction", dir)
+    if alive:
+        pos.insert(0, (x, y))
+        lib.set("position", pos)
+        lib.set("old_direction", dir)
+    else:
+        reset_game(lib)
 
 def core_loop(lib):
     c = lib.read()
@@ -73,12 +87,7 @@ def _main(repo_ctx):
         w = WIDTH,
         h = HEIGHT,
     ))
-    lib.set("position", [(2, 0), (1, 0), (0, 0)])
-    lib.set("direction", "s")
-    lib.set("old_direction", "s")
-    lib.set("iteration", 0)
-    lib.set("ate_food", True)
-    lib.set("food", (10, 10))
+    reset_game(lib)
     loop(core_loop, lib)
 
 main = repository_rule(
