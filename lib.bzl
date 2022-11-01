@@ -36,6 +36,8 @@ printf $in
         return ctx[key]
     def set(key, val):
         ctx[key] = val
+    def print(msg):
+        repo_ctx.report_progress(msg)
     def flush():
         chars = {(x, y): c for x, y, c in pixels}
         out = ""
@@ -44,11 +46,12 @@ printf $in
                 cell = chars.setdefault((x, y), " ")
                 out = out + cell
             out = out + "\n"
-        repo_ctx.report_progress("\n\n%s\n\n%s\n\n" % (
+        print("\n\n%s\n\n%s\n\n" % (
             "Press w/a/s/d to move...",
             out,
         ))
         pixels.clear()
+    
     return struct(
         print=print,
         set_px=set_px,
