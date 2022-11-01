@@ -25,10 +25,19 @@ def update(lib):
         if y >= HEIGHT:
             y = 0
     lib.set("position", (x, y))
+    lib.set("old_direction", dir)
 
 def core_loop(lib):
     c = lib.read()
-    if c in ["w", "a", "s", "d"]:
+    old_dir = lib.get("old_direction")
+
+    if c == "w" and old_dir != "s":
+        lib.set("direction", c)
+    if c == "s" and old_dir != "w":
+        lib.set("direction", c)
+    if c == "a" and old_dir != "d":
+        lib.set("direction", c)
+    if c == "d" and old_dir != "a":
         lib.set("direction", c)
 
     iteration = lib.get("iteration")
@@ -52,6 +61,7 @@ def _main(repo_ctx):
     ))
     lib.set("position", (5, 0))
     lib.set("direction", "s")
+    lib.set("old_direction", "s")
     lib.set("iteration", 0)
     loop(core_loop, lib)
 
