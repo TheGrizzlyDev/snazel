@@ -39,8 +39,8 @@ printf $in
     def flush():
         chars = {(x, y): c for x, y, c in pixels}
         out = ""
-        for x in range(settings.w):
-            for y in range(settings.h):
+        for y in range(settings.h):
+            for x in range(settings.w):
                 cell = chars.setdefault((x, y), " ")
                 out = out + cell
             out = out + "\n"

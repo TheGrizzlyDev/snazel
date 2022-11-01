@@ -1,7 +1,7 @@
 load("loop.bzl", "loop")
 load("lib.bzl", "newlib")
 
-WIDTH = 20
+WIDTH = 30
 HEIGHT = 20
 
 def update(lib):
@@ -43,10 +43,10 @@ def core_loop(lib):
 
 def _main(repo_ctx):
     lib = newlib(repo_ctx, struct(
-        w = 20,
-        h = 20,
+        w = WIDTH,
+        h = HEIGHT,
     ))
-    lib.set("position", (0, 0))
+    lib.set("position", (5, 0))
     lib.set("direction", "s")
     loop(core_loop, lib)
 
