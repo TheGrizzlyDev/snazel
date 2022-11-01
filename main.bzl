@@ -4,13 +4,9 @@ load("lib.bzl", "newlib")
 WIDTH = 20
 HEIGHT = 20
 
-state = {}
-state["pos"] = (0, 0)
-state["direction"] = "s"
-
 def update(lib):
-    dir = state["direction"]
-    x, y = state["pos"]
+    dir = lib.get("direction")
+    x, y = lib.get("position")
     if dir == "a":
         x = x-1
         if x < 0:
@@ -27,12 +23,12 @@ def update(lib):
         y = y + 1
         if y >= HEIGHT:
             y = 0
-    state["pos"] = (x, y)
+    lib.set("position", (x, y))
 
 def core_loop(lib):
     c = lib.read()
     if c in ["w", "a", "s", "d"]:
-        state["direction"] = c
+        lib.set("direction", c)
 
     update(lib)
 
@@ -40,16 +36,19 @@ def core_loop(lib):
         for y in range(HEIGHT):
             lib.set_px(x, y, "🔳")
 
-    player_x, player_y = state["pos"]
+    player_x, player_y = lib.get("position")
     lib.set_px(player_x, player_y, "🟩")
 
     lib.flush()
 
 def _main(repo_ctx):
-    loop(core_loop, newlib(repo_ctx, struct(
+    lib = newlib(repo_ctx, struct(
         w = 20,
         h = 20,
-    )))
+    ))
+    lib.set("position", (0, 0))
+    lib.set("direction", "s")
+    loop(core_loop, lib)
 
 main = repository_rule(
     _main

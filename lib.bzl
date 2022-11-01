@@ -9,6 +9,7 @@ def get_tty(repo_ctx, pid):
 
 def newlib(repo_ctx, settings):
     pixels = []
+    ctx = {}
     pid = get_pid(repo_ctx)
     tty = get_tty(repo_ctx, pid)
     repo_ctx.file(
@@ -31,6 +32,10 @@ printf $in
         if input != None and len(input) > 0:
             return input
         return None
+    def get(key):
+        return ctx[key]
+    def set(key, val):
+        ctx[key] = val
     def flush():
         chars = {(x, y): c for x, y, c in pixels}
         out = ""
@@ -46,4 +51,6 @@ printf $in
         set_px=set_px,
         flush=flush,
         read=read,
+        get=get,
+        set=set,
     )
