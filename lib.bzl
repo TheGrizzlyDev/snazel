@@ -9,7 +9,6 @@ def get_tty(repo_ctx, pid):
 
 def newlib(repo_ctx, settings):
     pixels = []
-    inputs = []
     pid = get_pid(repo_ctx)
     tty = get_tty(repo_ctx, pid)
     repo_ctx.file(
