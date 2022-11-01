@@ -51,6 +51,8 @@ printf $in
             out,
         ))
         pixels.clear()
+    def random(min, max):
+        return int(repo_ctx.execute(["/bin/bash", "-c", "echo $RANDOM %% %s + %s | bc" % (max, min)]).stdout.strip())
     
     return struct(
         print=print,
@@ -59,4 +61,5 @@ printf $in
         read=read,
         get=get,
         set=set,
+        random=random,
     )

@@ -30,7 +30,7 @@ def update(lib):
 
     food_x, food_y = lib.get("food")
     if x == food_x and y == food_y:
-        lib.set("food", (0, 0))
+        lib.set("food", (lib.random(0, WIDTH), lib.random(0, HEIGHT)))
     else:
         pos.pop()
 
