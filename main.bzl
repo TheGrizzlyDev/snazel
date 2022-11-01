@@ -3,6 +3,7 @@ load("lib.bzl", "newlib")
 
 WIDTH = 30
 HEIGHT = 20
+UPDATE_EVERY_N_LOOPS = 4
 
 def update(lib):
     dir = lib.get("direction")
@@ -30,7 +31,10 @@ def core_loop(lib):
     if c in ["w", "a", "s", "d"]:
         lib.set("direction", c)
 
-    update(lib)
+    iteration = lib.get("iteration")
+    if iteration % UPDATE_EVERY_N_LOOPS == 0:
+        update(lib)
+    lib.set("iteration", iteration + 1)
 
     for x in range(WIDTH):
         for y in range(HEIGHT):
@@ -48,6 +52,7 @@ def _main(repo_ctx):
     ))
     lib.set("position", (5, 0))
     lib.set("direction", "s")
+    lib.set("iteration", 0)
     loop(core_loop, lib)
 
 main = repository_rule(
