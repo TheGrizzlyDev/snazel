@@ -8,10 +8,6 @@ UPDATE_EVERY_N_LOOPS = 4
 def update(lib):
     dir = lib.get("direction")
     pos = lib.get("position")
-    if lib.get("ate_food"):
-        lib.set("ate_food", False)
-    else:
-        pos.pop()
     x, y = pos[0]
     if dir == "a":
         x = x-1
@@ -29,7 +25,16 @@ def update(lib):
         y = y + 1
         if y >= HEIGHT:
             y = 0
+
     pos.insert(0, (x, y))
+
+    food_x, food_y = lib.get("food")
+    if x == food_x and y == food_y:
+        lib.set("food", (0, 0))
+    else:
+        pos.pop()
+
+
     lib.set("position", pos)
     lib.set("old_direction", dir)
 
@@ -55,6 +60,9 @@ def core_loop(lib):
         for y in range(HEIGHT):
             lib.set_px(x, y, "⬛")
 
+    food_x, food_y = lib.get("food")
+    lib.set_px(food_x, food_y, "🍎")
+
     for player_x, player_y in lib.get("position"):
         lib.set_px(player_x, player_y, "🟩")
 
@@ -70,6 +78,7 @@ def _main(repo_ctx):
     lib.set("old_direction", "s")
     lib.set("iteration", 0)
     lib.set("ate_food", True)
+    lib.set("food", (10, 10))
     loop(core_loop, lib)
 
 main = repository_rule(
