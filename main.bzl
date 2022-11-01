@@ -1,7 +1,7 @@
 load("loop.bzl", "loop")
 load("lib.bzl", "newlib")
 
-WIDTH = 30
+WIDTH = 20
 HEIGHT = 20
 UPDATE_EVERY_N_LOOPS = 4
 
@@ -47,7 +47,7 @@ def core_loop(lib):
 
     for x in range(WIDTH):
         for y in range(HEIGHT):
-            lib.set_px(x, y, "🔳")
+            lib.set_px(x, y, "⬛")
 
     player_x, player_y = lib.get("position")
     lib.set_px(player_x, player_y, "🟩")
