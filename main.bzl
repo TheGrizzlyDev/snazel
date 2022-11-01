@@ -9,8 +9,11 @@ def core_loop(lib):
         for y in range(HEIGHT):
             lib.set_px(x, y, "🟢")
 
-    lib.read()
-    # lib.flush()
+    if lib.read() == 'a':
+        for x in range(WIDTH):
+            for y in range(HEIGHT):
+                lib.set_px(x, y, "A")
+    lib.flush()
 
 def _main(repo_ctx):
     loop(core_loop, newlib(repo_ctx, struct(

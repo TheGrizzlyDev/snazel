@@ -9,13 +9,29 @@ def get_tty(repo_ctx, pid):
 
 def newlib(repo_ctx, settings):
     pixels = []
+    inputs = []
     pid = get_pid(repo_ctx)
     tty = get_tty(repo_ctx, pid)
+    repo_ctx.file(
+        "input_reader.sh",
+        executable = True,
+        content = """
+#!/bin/bash
+
+read -sn 1 -t .1 in < {tty}
+printf $in
+        """.strip().format(
+            tty = tty,
+        )
+    )
     def set_px(x, y, c):
         pixels.append((x, y, c))
     def read():
-        exec_result = repo_ctx.execute(["/bin/bash", "-c", "read -i 'nope' -n 1 -t 10 in < %s && echo $in" % (tty)])
-        repo_ctx.report_progress("Test %s %s" % (tty, exec_result.stdout))
+        exec_res = repo_ctx.execute(["/bin/bash", "-c", repo_ctx.path("input_reader.sh")])
+        input = exec_res.stdout.strip()
+        if input != None and len(input) > 0:
+            return input
+        return None
     def flush():
         chars = {(x, y): c for x, y, c in pixels}
         out = ""
