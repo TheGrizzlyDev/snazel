@@ -1,4 +1,4 @@
-# Snazel
+# 🐍 Snazel
 
 Snazel is an implementation of snake in a bazel workspace. Yup, nothing more, nothing less and might crash your terminal. In fact, it is very likely to and I don't have the mental energy necessary to figure out why.
 
